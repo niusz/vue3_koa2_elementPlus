@@ -4,10 +4,10 @@ import App from './App.vue'
 import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import axios from 'axios'
-import config from './config'
+import request from './utils/request'
+import storage from './utils/storage'
 const app = createApp(App)
-axios.get(config.mockApi + '/login').then((res) => {
-    console.log(res);
-})
+app.config.globalProperties.$request = request
+app.config.globalProperties.$storage = storage
+
 app.use(router).use(ElementPlus).mount('#app')
