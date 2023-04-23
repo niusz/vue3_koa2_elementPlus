@@ -1,16 +1,56 @@
 
+<template>
+  <div class="basic-layout">
+    <div class="nav-side"></div>
+    <div class="content-right">
+      <div class="nav-top"></div>
+      <div class="wrapper">
+        <div class="main-page">
+          <router-view></router-view>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 <script>
 export default {
   name: "Home",
 };
 </script>
 
-<template>
-  <div>
-    <h1>欢迎学习Vue3</h1>
-    <router-view></router-view>
-  </div>
-</template>
 
-<style scoped>
+
+<style lang="scss">
+.basic-layout {
+  position: relative;
+  .nav-side {
+    position: fixed;
+    width: 200px;
+    height: 100vh;
+    background-color: #001529;
+    color: #fff;
+    overflow-y: auto;
+    transition: width 0.5s;
+  }
+  .content-right {
+    margin-left: 200px;
+    .nav-top {
+      height: 50px;
+      line-height: 50px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 0 20px;
+    }
+    .wrapper {
+      background: #eef0f3;
+      padding: 20px;
+      height: calc(100vh - 50px);
+      .main-page {
+        background: #fff;
+        height: 100%;
+      }
+    }
+  }
+}
 </style>
