@@ -10,7 +10,7 @@
       :index="menu.index"
     >
       <template #title>
-        <el-icon><Setting /></el-icon>
+        <el-icon><component :is="menu.icon" /></el-icon>
         <span>{{ menu.menuName }}</span>
       </template>
       <tree-menu :userMenu="menu.children"></tree-menu>

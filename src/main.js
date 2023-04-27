@@ -18,4 +18,4 @@ app.config.globalProperties.$storage = storage
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
-app.use(router).use(store).use(ElementPlus).mount('#app')
+app.use(router).use(store).use(ElementPlus, { size: 'small' }).mount('#app')
