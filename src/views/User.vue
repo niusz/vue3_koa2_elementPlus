@@ -39,7 +39,7 @@
         />
         <el-table-column label="操作" width="150">
           <template #default="scope">
-            <el-button @click="handleClick(scope.row)" size="small"
+            <el-button @click="handleEdit(scope.row)" size="small"
               >编辑</el-button
             >
             <el-button type="danger" size="small" @click="handleDel(scope.row)"
@@ -65,10 +65,18 @@
         :rules="rules"
       >
         <el-form-item label="用户名" prop="userName">
-          <el-input v-model="userForm.userName" placeholder="请输入用户名称" />
+          <el-input
+            v-model="userForm.userName"
+            :disabled="action == 'edit'"
+            placeholder="请输入用户名称"
+          />
         </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
-          <el-input v-model="userForm.userEmail" placeholder="请输入用户邮箱">
+          <el-input
+            v-model="userForm.userEmail"
+            :disabled="action == 'edit'"
+            placeholder="请输入用户邮箱"
+          >
             <template #append> @imooc.com </template>
           </el-input>
         </el-form-item>
@@ -122,13 +130,14 @@
 
 <script>
 import { getCurrentInstance, onMounted, reactive, ref, toRaw } from "vue";
+import utils from "./../utils/utils";
 export default {
   name: "user",
   setup() {
     // 获取composition API上下文对象
     const { proxy } = getCurrentInstance();
     // 初始化用户表单对象
-    const user = reactive({ state: 0 });
+    const user = reactive({ state: 1 });
     // 初始化用户列表数据
     const userList = ref([]);
 
@@ -166,10 +175,18 @@ export default {
       {
         label: "注册时间",
         prop: "createTime",
+        width: 180,
+        formatter: (row, column, value) => {
+          return utils.formatDate(new Date(value));
+        },
       },
       {
         label: "最后登录时间",
         prop: "lastLoginTime",
+        width: 180,
+        formatter: (row, column, value) => {
+          return utils.formatDate(new Date(value));
+        },
       },
     ]);
 
@@ -217,7 +234,7 @@ export default {
       ],
       mobile: [
         {
-          pattern: /1\d{10}/,
+          pattern: /1[3-9]\d{9}/,
           message: "请输入正确的手机号格式",
           trigger: "blur",
         },
@@ -307,6 +324,7 @@ export default {
 
     // 用户新增
     const handleCreate = () => {
+      action.value = "add";
       showModal.value = true;
     };
 
@@ -336,13 +354,20 @@ export default {
           params.userEmail += "@imooc.com";
           params.action = action.value;
           let res = await proxy.$api.userSubmit(params);
-          if (res) {
-            showModal.value = false;
-            proxy.$message.success("用户创建成功");
-            handleReset("dialogForm");
-            getUserList();
-          }
+          showModal.value = false;
+          proxy.$message.success("用户创建成功");
+          handleReset("dialogForm");
+          getUserList();
         }
+      });
+    };
+
+    // 用户编辑
+    const handleEdit = (row) => {
+      action.value = "edit";
+      showModal.value = true;
+      proxy.$nextTick(() => {
+        Object.assign(userForm, row);
       });
     };
     return {
@@ -356,6 +381,7 @@ export default {
       userForm,
       roleList,
       deptList,
+      action,
       getUserList,
       handleQuery,
       handleReset,
@@ -368,6 +394,7 @@ export default {
       getDeptList,
       handleClose,
       handleSubmit,
+      handleEdit,
     };
   },
 };
