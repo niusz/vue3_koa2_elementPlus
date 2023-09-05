@@ -1,17 +1,16 @@
-
 <template>
   <div class="basic-layout">
     <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
-      <!--系统logo-->
+      <!-- 系统LOGO -->
       <div class="logo">
-        <img src="./../assets/logo.png" alt="" />
+        <img src="./../assets/logo.png" />
         <span>Manager</span>
       </div>
-      <!--导航菜单-->
+      <!-- 导航菜单 -->
       <el-menu
         :default-active="activeMenu"
         background-color="#001529"
-        text-color="#FFF"
+        text-color="#fff"
         router
         :collapse="isCollapse"
         class="nav-menu"
@@ -23,22 +22,24 @@
       <div class="nav-top">
         <div class="nav-left">
           <div class="menu-fold" @click="toggle">
-            <el-icon><Fold /></el-icon>
+            <i class="el-icon-s-fold"></i>
           </div>
           <div class="bread">
-            <bread-crumb />
+            <BreadCrumb />
           </div>
         </div>
         <div class="user-info">
-          <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice">
-            <el-icon><Bell /></el-icon>
+          <el-badge
+            :is-dot="noticeCount > 0 ? true : false"
+            class="notice"
+            type="danger"
+          >
+            <i class="el-icon-bell"></i>
           </el-badge>
           <el-dropdown @command="handleLogout">
             <span class="user-link">
               {{ userInfo.userName }}
-              <el-icon class="el-icon--right">
-                <arrow-down />
-              </el-icon>
+              <i class="el-icon--right"></i>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -57,6 +58,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import TreeMenu from "./TreeMenu.vue";
 import BreadCrumb from "./BreadCrumb.vue";
@@ -69,7 +71,7 @@ export default {
       userInfo: this.$store.state.userInfo,
       noticeCount: 0,
       userMenu: [],
-      activeMenu: "",
+      activeMenu: location.hash.slice(1),
     };
   },
   mounted() {
@@ -80,29 +82,26 @@ export default {
     toggle() {
       this.isCollapse = !this.isCollapse;
     },
-
     handleLogout(key) {
       if (key == "email") return;
       this.$store.commit("saveUserInfo", "");
       this.userInfo = null;
       this.$router.push("/login");
     },
-
     async getNoticeCount() {
       try {
         const count = await this.$api.noticeCount();
         this.noticeCount = count;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
-
     async getMenuList() {
       try {
         const list = await this.$api.getMenuList();
-        this.userMenu = list.menuList;
+        this.userMenu = list;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },
@@ -146,12 +145,13 @@ export default {
   }
   .content-right {
     margin-left: 200px;
+    // 合并
+    &.fold {
+      margin-left: 64px;
+    }
     // 展开
     &.unfold {
       margin-left: 200px;
-    }
-    &.fold {
-      margin-left: 64px;
     }
     .nav-top {
       height: 50px;

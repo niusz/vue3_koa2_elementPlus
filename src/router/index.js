@@ -20,7 +20,7 @@ const routes = [
             },
             {
                 name: 'user',
-                path: 'user',
+                path: '/system/user',
                 meta: {
                     title: '用户管理'
                 },
@@ -28,7 +28,7 @@ const routes = [
             },
             {
                 name: 'menu',
-                path: 'menu',
+                path: '/system/menu',
                 meta: {
                     title: '菜单管理'
                 },

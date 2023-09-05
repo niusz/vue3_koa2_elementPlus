@@ -192,6 +192,7 @@ export default {
       ],
       showModal: false,
       menuForm: {
+        parentId: [null],
         menuType: 1,
         menuState: 1,
       },
@@ -275,5 +276,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
